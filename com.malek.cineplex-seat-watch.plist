@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.malek.cineplex-seat-watch</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Library/Frameworks/Python.framework/Versions/3.14/bin/python3</string>
+        <string>/Users/malekabdullah/cineplex-seat-watch/watch.py</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/malekabdullah/cineplex-seat-watch</string>
+
+    <!-- Run every 10 minutes, and once immediately when loaded -->
+    <key>StartInterval</key>
+    <integer>600</integer>
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- Set NTFY_TOPIC here to get phone pushes (see README). Add SMTP_* for email. -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>NTFY_TOPIC</key>
+        <string>odyssey-imax70-vaughan-642388</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/malekabdullah/cineplex-seat-watch/watch.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/malekabdullah/cineplex-seat-watch/watch.log</string>
+
+    <key>ProcessType</key>
+    <string>Background</string>
+</dict>
+</plist>

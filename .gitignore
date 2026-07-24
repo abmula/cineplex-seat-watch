@@ -1,0 +1,4 @@
+watch.log
+*.tmp
+state.json.tmp
+__pycache__/

@@ -1,0 +1,54 @@
+name: cineplex-seat-watch
+
+# Cloud watcher — runs on GitHub's infrastructure, no laptop required.
+# Notifications in the cloud go to your phone via ntfy (set the NTFY_TOPIC secret).
+
+on:
+  schedule:
+    # Every 10 minutes. GitHub may delay scheduled runs under load — best effort.
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}   # lets you run it on demand from the Actions tab
+
+concurrency:
+  group: seat-watch
+  cancel-in-progress: false
+
+permissions:
+  contents: write   # to commit state.json / layouts back so de-dup persists
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install --quiet certifi
+
+      - name: Run watcher
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          # Optional email (set these secrets to enable):
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          # Override the subscription key without editing code, if it ever rotates:
+          CINEPLEX_SUBSCRIPTION_KEY: ${{ secrets.CINEPLEX_SUBSCRIPTION_KEY }}
+        run: python watch.py
+
+      - name: Persist state
+        run: |
+          git config user.name  "seat-watch-bot"
+          git config user.email "seat-watch-bot@users.noreply.github.com"
+          git add -A state.json layouts 2>/dev/null || true
+          if ! git diff --cached --quiet; then
+            git commit -m "state update [skip ci]"
+            git push
+          else
+            echo "no state change"
+          fi

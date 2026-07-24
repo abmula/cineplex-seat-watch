@@ -10,7 +10,7 @@ alert, you book manually (and fast).
 
 ## Files
 - `watch.py` — the watcher. Runs once per invocation.
-- `com.malek.cineplex-seat-watch.plist` — launchd job that runs it every 10 min.
+- `com.[user].cineplex-seat-watch.plist` — launchd job that runs it every 10 min.
 - `state.json` — remembers what it already alerted on (so you're not spammed).
 - `layouts/` — cached seat maps (geometry never changes).
 - `watch.log` — output from each run.
@@ -29,7 +29,7 @@ alert, you book manually (and fast).
 - **macOS banner** — always fires (via `osascript`). Requires you to be logged in.
 - **Phone push (recommended)** via [ntfy.sh](https://ntfy.sh) — free, no account:
   1. Install the **ntfy** app (iOS/Android).
-  2. Pick a private, hard-to-guess topic, e.g. `malek-odyssey-7f3a9c`.
+  2. Pick a private, hard-to-guess topic, e.g. `[user]-odyssey-7f3a9c`.
   3. Subscribe to that topic in the app.
   4. Put the same topic in the plist `NTFY_TOPIC` value (or export `NTFY_TOPIC`).
 - **Email (optional)** — set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`
@@ -37,24 +37,24 @@ alert, you book manually (and fast).
 
 ## Install (run every 10 minutes, forever)
 ```bash
-cp /Users/malekabdullah/cineplex-seat-watch/com.malek.cineplex-seat-watch.plist \
+cp /Users/[user]/cineplex-seat-watch/com.[user].cineplex-seat-watch.plist \
    ~/Library/LaunchAgents/
-launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.malek.cineplex-seat-watch.plist
-launchctl enable gui/$(id -u)/com.malek.cineplex-seat-watch
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.[user].cineplex-seat-watch.plist
+launchctl enable gui/$(id -u)/com.[user].cineplex-seat-watch
 ```
 Check it:
 ```bash
 launchctl list | grep cineplex
-tail -f /Users/malekabdullah/cineplex-seat-watch/watch.log
+tail -f /Users/[user]/cineplex-seat-watch/watch.log
 ```
 Stop / remove:
 ```bash
-launchctl bootout gui/$(id -u)/com.malek.cineplex-seat-watch
+launchctl bootout gui/$(id -u)/com.[user].cineplex-seat-watch
 ```
 
 ## Run once by hand
 ```bash
-cd /Users/malekabdullah/cineplex-seat-watch && python3 watch.py
+cd /Users/[user]/cineplex-seat-watch && python3 watch.py
 ```
 
 ## Tuning (env vars or edit the constants at the top of `watch.py`)

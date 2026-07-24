@@ -35,7 +35,7 @@ NTFY_TOPIC   = os.environ.get("NTFY_TOPIC", "")              # e.g. "malek-odyss
 NTFY_SERVER  = os.environ.get("NTFY_SERVER", "https://ntfy.sh")
 # Email (SMTP) — leave blank to disable. Use an app password, never your login password.
 SMTP_HOST    = os.environ.get("SMTP_HOST", "")
-SMTP_PORT    = int(os.environ.get("SMTP_PORT", "587"))
+SMTP_PORT    = int(os.environ.get("SMTP_PORT") or "587")   # `or` so an unset ("") secret doesn't crash int()
 SMTP_USER    = os.environ.get("SMTP_USER", "")
 SMTP_PASS    = os.environ.get("SMTP_PASS", "")
 EMAIL_TO     = os.environ.get("EMAIL_TO", "")
